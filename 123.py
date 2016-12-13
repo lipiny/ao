@@ -74,13 +74,24 @@ test_set_normalize_trans = test_set_normalize.tocsr()
 trainning_topwords_matrix = build_topwords_matrix(trainning_set_normalize_trans, top_words, trainning_doc_num)
 test_topwords_matrix = build_topwords_matrix(test_set_normalize_trans, top_words, test_doc_num)
 
-trainning_topwards_set_normalize=preprocessing.normalize(trainning_topwords_matrix, axis=0)
-test_topwards_set_normalize=preprocessing.normalize(test_topwords_matrix, axis=0)
+trainning_topwords_set_normalize=preprocessing.normalize(trainning_topwords_matrix, axis=0)
+test_topwords_set_normalize=preprocessing.normalize(test_topwords_matrix, axis=0)
 
-tw_trainning_W, tw_trainning_H = nmf_set_zero(trainning_topwards_set_normalize, n_components)
-tw_test_H = nmf_keepW(test_topwards_set_normalize, tw_trainning_W, n_components)
+tw_trainning_W, tw_trainning_H = nmf(trainning_topwords_set_normalize, n_components)
+tw_test_H = nmf_keepW(test_topwords_set_normalize, tw_trainning_W, n_components)
 
 tw_trainning_H_trans = tw_trainning_H.transpose()
 tw_test_H_trans = tw_test_H.transpose()
 
 knn(num_neighbors, tw_trainning_H_trans, trainning_categorie, tw_test_H_trans, test_categorie)
+
+
+'''
+tw_trainning_W, tw_trainning_H = nmf_set_zero(trainning_topwords_set_normalize, n_components)
+tw_test_H = nmf_keepW(test_topwords_set_normalize, tw_trainning_W, n_components)
+
+tw_trainning_H_trans = tw_trainning_H.transpose()
+tw_test_H_trans = tw_test_H.transpose()
+
+knn(num_neighbors, tw_trainning_H_trans, trainning_categorie, tw_test_H_trans, test_categorie)
+'''
