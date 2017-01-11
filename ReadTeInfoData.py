@@ -146,8 +146,7 @@ def readfile_te_infodata(order, begin, end, rescale_num, filename_info, filename
 				exit()
 			#print('in loop %d the index is from %d to %d.'%(j, index_1, index_2))
 			judge = 0
-		
-		indptr = np.append(indptr, [indptr_tmp])
+		indptr = np.append(indptr, [indptr[len(indptr)-1] + indptr_tmp])
 		#---info data---
 		#----finish----
 

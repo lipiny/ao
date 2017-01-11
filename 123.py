@@ -17,20 +17,25 @@ from knn import knn
 from svm import svmclf
 
 #=====================parameter====================
-#read term list
+
 	###
 	#order = 'all'			parameter:none
 	#order = 'continuous'	parameter:begin, rescale_num
 	#order = 'backorder'	parameter:rescale_num
 	#order = 'random'		parameter:begin, end, rescale_num
-order = 'continuous'
-begin = 0
-end = 500
-#--number of data to use
-training_rescale_num = 1000
-test_rescale_num = 500
+	###
+#parameter for reading training data
+tr_order = 'backorder'
+tr_begin = 0
+tr_end = 500
+training_rescale_num = 50000
+#parameter for reading test data
+te_order = 'continuous'
+te_begin = 0
+te_end = 100
+test_rescale_num = 5000
 #---NMF
-n_components=5
+n_components=300
 #---knn
 num_neighbors=5
 #topwords
@@ -55,9 +60,9 @@ term_num, term_list = readfile_termlist(filename_termList)
 	#read data&info file
 	#===============================
 
-training_set, training_term_list, training_doc_num, training_title, training_categorie = readfile_tr_infodata(order, begin, end, training_rescale_num, filename_training_info, filename_training_data)
+training_set, training_term_list, training_doc_num, training_title, training_categorie = readfile_tr_infodata(tr_order, tr_begin, tr_end, training_rescale_num, filename_training_info, filename_training_data)
 
-test_set, test_doc_num, test_title, test_categorie = readfile_te_infodata(order, begin, end, test_rescale_num, filename_test_info, filename_test_data, training_term_list)
+test_set, test_doc_num, test_title, test_categorie = readfile_te_infodata(te_order, te_begin, te_end, test_rescale_num, filename_test_info, filename_test_data, training_term_list)
 
 
 training_set_normalize=preprocessing.normalize(training_set, axis=0)
@@ -68,7 +73,13 @@ test_set_normalize=preprocessing.normalize(test_set,axis=0)
 	#===============================
 
 training_W, training_H = nmf(training_set_normalize, n_components)
-test_H = nmf_keepW(test_set_normalize, training_W, n_components)
+
+print(training_set_normalize.shape)
+print(training_W.shape)
+print(training_H.shape)
+print(test_set_normalize.shape)
+
+test_H = nmf_keepW(test_set_normalize, training_W)
 
 training_H_trans = training_H.transpose()
 test_H_trans = test_H.transpose()
