@@ -5,7 +5,7 @@ def nmf_keepW(X, W):
 
 	eps = 1e-5
 	X = X.toarray()
-	print('hello mdzz')
+
 	# W = W
 	# H is W\X
 

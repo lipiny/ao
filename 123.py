@@ -28,14 +28,14 @@ from svm import svmclf
 tr_order = 'backorder'
 tr_begin = 0
 tr_end = 500
-training_rescale_num = 50000
+training_rescale_num = 10
 #parameter for reading test data
 te_order = 'continuous'
 te_begin = 0
 te_end = 100
-test_rescale_num = 5000
+test_rescale_num = 10
 #---NMF
-n_components=300
+n_components=3
 #---knn
 num_neighbors=5
 #topwords
@@ -66,6 +66,7 @@ test_set, test_doc_num, test_title, test_categorie = readfile_te_infodata(te_ord
 
 
 training_set_normalize=preprocessing.normalize(training_set, axis=0)
+print('now training data process finish')
 test_set_normalize=preprocessing.normalize(test_set,axis=0)
 
 	#===============================
