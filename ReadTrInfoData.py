@@ -135,8 +135,8 @@ def readfile_tr_infodata(order, begin, end, rescale_num, filename_info, filename
 
 		indptr = np.append(indptr, [indptr[len(indptr)-1] + indptr_tmp])
 
-		if(i%10==0 or i==1 or i==art_num-1):
-			print('-- article %d in %d read finish'%(i, art_num))
+		if(i%20==0):
+			print('-- training data article %d in %d read finish'%(i, art_num))
 
 	#---info data---
 	#----finish----
@@ -146,12 +146,15 @@ def readfile_tr_infodata(order, begin, end, rescale_num, filename_info, filename
 	term_list_num = len(training_term_list)
 	
 	#adjust the indices
+	indices_len = len(indices)
 	new_indices = np.array([])
-	for i in range(0, len(indices)):
+	for i in range(0, indices_len):
 		new_indices_count = 0
 		while(indices[i] != training_term_list[new_indices_count]):
 			new_indices_count = new_indices_count + 1
 		new_indices = np.append(new_indices, [new_indices_count])
+		if(i%500==0):
+			print('== training data %d new indices in %d generated '%(i, indices_len))
 
 	#===============================
 	#compress to a CSC matrix

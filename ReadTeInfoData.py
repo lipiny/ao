@@ -114,7 +114,6 @@ def readfile_te_infodata(order, begin, end, rescale_num, filename_info, filename
 			#---indices
 			while((lines_data[sample_docs[i]][index_2] == ':') is False):
 				index_2 = index_2 + 1
-			#print('in loop %d the index is from %d to %d.'%(i, index_1, index_2))
 			indices_tmp=int(lines_data[sample_docs[i]][index_1:index_2])
 			for k in range(0, len(training_term_list)):
 				if( indices_tmp == training_term_list[k] ):
@@ -144,11 +143,10 @@ def readfile_te_infodata(order, begin, end, rescale_num, filename_info, filename
 			else:
 				print('error in [ReadTeInfoData.py] with judge')
 				exit()
-			#print('in loop %d the index is from %d to %d.'%(j, index_1, index_2))
 			judge = 0
 		indptr = np.append(indptr, [indptr[len(indptr)-1] + indptr_tmp])
 
-		if(i%10==0 or i==1 or i==art_num-1):
+		if(i%20==0):
 			print('-- article %d in %d read finish'%(i, art_num))
 
 	#---info data---
