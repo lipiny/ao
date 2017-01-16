@@ -120,7 +120,7 @@ def readfile_te_infodata(order, begin, end, rescale_num, filename_info, filename
 				if( indices_tmp == training_term_list[k] ):
 					judge = 1
 					indices = np.append(indices, [k])
-					continue
+					break
 			if( judge == 0 ):
 				#print('judge = 0')
 				indptr_tmp = indptr_tmp - 1
