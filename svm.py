@@ -9,5 +9,4 @@ def svmclf(train_matrix, train_categorie, test_matrix, test_categorie):
     num_correct = sum(predict_categorie == test_categorie)
     num_wrong = num_sum - num_correct
 
-    print('the predict rate is %f, with %d correct and %d wrong.' %(float(num_correct)/(num_sum), num_correct, num_wrong))
-
+    print('SVM : %f, with %d correct and %d wrong.' %(float(num_correct)/(num_sum), num_correct, num_wrong))
