@@ -147,8 +147,12 @@ def readfile_te_infodata(order, begin, end, rescale_num, filename_info, filename
 			#print('in loop %d the index is from %d to %d.'%(j, index_1, index_2))
 			judge = 0
 		indptr = np.append(indptr, [indptr[len(indptr)-1] + indptr_tmp])
-		#---info data---
-		#----finish----
+
+		if(i%10==0 or i==1 or i==art_num-1):
+			print('-- article %d in %d read finish'%(i, art_num))
+
+	#---info data---
+	#----finish----
 
 	#===============================
 	#compress to a CSC matrix

@@ -62,7 +62,7 @@ term_num, term_list = readfile_termlist(filename_termList)
 	#read data&info file
 	#===============================
 
-print('reading training data process begin')
+print('-×-×-×-reading training data process begin-×-×-×-')
 start_time = time.time()
 
 ### read training data
@@ -72,7 +72,7 @@ end_time = time.time()
 print('reading training data process finish, time: %f'%(end_time - start_time))
 print('the new dictionary has %d words'%len(training_term_list))
 
-print('reading test data process begin')
+print('-×-×-×-reading test data process begin-×-×-×-')
 start_time = time.time()
 
 ### read test data
@@ -88,7 +88,7 @@ test_set_normalize=preprocessing.normalize(test_set,axis=0)
 	#nmf and knn
 	#===============================
 
-print('NMF process begin')
+print('-×-×-×-NMF process begin-×-×-×-')
 start_time = time.time()
 
 ### NMF

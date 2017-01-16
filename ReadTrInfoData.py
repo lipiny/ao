@@ -89,53 +89,54 @@ def readfile_tr_infodata(order, begin, end, rescale_num, filename_info, filename
 
 	#===============================
 	#CSR format
-	#result indptr
+	#result indptr, indices, data
 	#===============================
 
-	#---'+1' because indptr[0]=0---
-	indptr = np.zeros((art_num+1))
-	#indptr[0] = int(0)
 
-	for i in range(0,art_num):
-		count = 0
-		while((lines_data[sample_docs[i]][count] == ' ') is False):
-			count = count + 1
-		indptr[i+1]=int(lines_data[sample_docs[i]][0:count])+int(indptr[i])
-	#---indptr is a float array and I don't know how to convert---
-	#---so when you use it please add int()---
-	#---ok I know the reason. This is because I am using numpy array.
-
-	#===============================
-	#CSR format
-	#result indices, data
-	#===============================
-	indices = np.zeros((int(indptr[art_num])))
-	data = np.zeros((int(indptr[art_num])))
+	indptr = np.array([0])
+	indices = np.array([])
+	data = np.array([])
 
 	for i in range(0,art_num):
 		index_1 = 0
 		index_2 = 0
-		count = 0
+	
+		num_words = 0
+
+		indptr_tmp = 0
+		indices_tmp = -1
+		data_tmp = -1
+
+		# indptr
 		while((lines_data[sample_docs[i]][index_2] == ' ') is False):
 			index_2 = index_2 + 1
-		index_1 = index_2
-		#---from element 0 to the last 2nd one---
-		for j in range(0, int(indptr[i+1])-int(indptr[i])-1):
+		indptr_tmp=int(lines_data[sample_docs[i]][index_1:index_2])
+		num_words = int(indptr_tmp)
+
+		for j in range(0, num_words):
+			# indices
+			index_2 = index_2 + 1
+			index_1 = index_2
 			while((lines_data[sample_docs[i]][index_2] == ':') is False):
 				index_2 = index_2 + 1
-			indices[int(indptr[i])+count]=int(lines_data[sample_docs[i]][index_1+1:index_2])
+			indices_tmp=int(lines_data[sample_docs[i]][index_1:index_2])
+			indices = np.append(indices, [indices_tmp])
+
+			# data
+			index_2 = index_2 + 1
 			index_1 = index_2
-			while((lines_data[sample_docs[i]][index_2] == ' ') is False):
-				index_2 = index_2 + 1
-			data[int(indptr[i])+count]=int(lines_data[sample_docs[i]][index_1+1:index_2])
-			index_1 = index_2
-			count = count + 1
-			#print(data[int(indptr[i])+count])
-		#---deal with the last one---
-		while((lines_data[sample_docs[i]][index_2] == ':') is False):
-				index_2 = index_2 + 1
-		indices[int(indptr[i])+count]=int(lines_data[sample_docs[i]][index_1+1:index_2])
-		data[int(indptr[i])+count]=int(lines_data[sample_docs[i]][index_2+1:])
+			if(j < num_words - 1):
+				while((lines_data[sample_docs[i]][index_2] == ' ') is False):
+					index_2 = index_2 + 1
+				data_tmp=int(lines_data[sample_docs[i]][index_1:index_2])
+			elif( j == num_words - 1 ):
+				data_tmp=int(lines_data[sample_docs[i]][index_1:])
+			data = np.append(data, [data_tmp])
+
+		indptr = np.append(indptr, [indptr[len(indptr)-1] + indptr_tmp])
+
+		if(i%10==0 or i==1 or i==art_num-1):
+			print('-- article %d in %d read finish'%(i, art_num))
 
 	#---info data---
 	#----finish----
@@ -145,14 +146,12 @@ def readfile_tr_infodata(order, begin, end, rescale_num, filename_info, filename
 	term_list_num = len(training_term_list)
 	
 	#adjust the indices
-	new_indices = np.zeros((int(indptr[art_num])))
-	for i in range(0,art_num):
-		#count = 0
-		for j in range(0, int(indptr[i+1])-int(indptr[i])):
-			count = 0
-			while ( indices[j] != training_term_list[count] ):
-				count = count + 1
-			new_indices[int(indptr[i])+j] = count
+	new_indices = np.array([])
+	for i in range(0, len(indices)):
+		new_indices_count = 0
+		while(indices[i] != training_term_list[new_indices_count]):
+			new_indices_count = new_indices_count + 1
+		new_indices = np.append(new_indices, [new_indices_count])
 
 	#===============================
 	#compress to a CSC matrix
