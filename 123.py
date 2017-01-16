@@ -15,6 +15,7 @@ from BuildTopwordsMatrix import build_topwords_matrix
 from nmfSetZero import nmf_set_zero
 from knn import knn
 from svm import svmclf
+import time
 
 #=====================parameter====================
 
@@ -36,6 +37,7 @@ te_end = 100
 test_rescale_num = 10
 #---NMF
 n_components=3
+max_iter=30
 #---knn
 num_neighbors=5
 #topwords
@@ -60,25 +62,41 @@ term_num, term_list = readfile_termlist(filename_termList)
 	#read data&info file
 	#===============================
 
+print('reading training data process begin')
+start_time = time.time()
+
+### read training data
 training_set, training_term_list, training_doc_num, training_title, training_categorie = readfile_tr_infodata(tr_order, tr_begin, tr_end, training_rescale_num, filename_training_info, filename_training_data)
 
+end_time = time.time()
+print('reading training data process finish, time: %f'%(end_time - start_time))
+print('the new dictionary has %d words'%len(training_term_list))
+
+print('reading test data process begin')
+start_time = time.time()
+
+### read test data
 test_set, test_doc_num, test_title, test_categorie = readfile_te_infodata(te_order, te_begin, te_end, test_rescale_num, filename_test_info, filename_test_data, training_term_list)
 
+end_time = time.time()
+print('reading test data process finish time: %f'%(end_time - start_time))
 
 training_set_normalize=preprocessing.normalize(training_set, axis=0)
-print('now training data process finish')
 test_set_normalize=preprocessing.normalize(test_set,axis=0)
 
 	#===============================
 	#nmf and knn
 	#===============================
 
-training_W, training_H = nmf(training_set_normalize, n_components)
+print('NMF process begin')
+start_time = time.time()
 
-print(training_set_normalize.shape)
-print(training_W.shape)
-print(training_H.shape)
-print(test_set_normalize.shape)
+### NMF
+training_W, training_H = nmf(training_set_normalize, n_components, max_iter)
+
+end_time = time.time()
+print('NMF process end, time: %f'%(end_time - start_time))
+
 
 test_H = nmf_keepW(test_set_normalize, training_W)
 

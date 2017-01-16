@@ -2,10 +2,9 @@ import numpy as np
 from scipy import linalg
 from numpy import dot
 
-def nmf(X, n_components, max_iter=50, error_limit=1e-6):
+def nmf(X, n_components, max_iter, error_limit=1e-6):
 
     eps = 1e-5
-    print('Starting NMF decomposition with %d components and %d iterations.'%(n_components, max_iter))
     X = X.toarray()
 
     # initial. W is random [0,1] and H is W\X.
