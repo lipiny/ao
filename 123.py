@@ -30,14 +30,14 @@ import time
 tr_order = 'backorder'
 tr_begin = 0
 tr_end = 500
-training_rescale_num = 5000
+training_rescale_num = 100
 #parameter for reading test data
 te_order = 'continuous'
 te_begin = 0
 te_end = 100
-test_rescale_num = 1000
+test_rescale_num = 100
 #---NMF
-n_components=100
+n_components=10
 max_iter=50
 #---knn
 num_neighbors=5
@@ -112,7 +112,6 @@ training_H_trans = training_H.transpose()
 test_H_trans = test_H.transpose()
 
 knn(num_neighbors, training_H_trans, training_categorie, test_H_trans, test_categorie)
-svmclf(training_H_trans, training_categorie, test_H_trans, test_categorie)
 
 	#===============================
 	#new method
@@ -128,4 +127,3 @@ tr_zero_H_trans = tr_zero_H.transpose()
 test_zero_H_trans = test_zero_H.transpose()
 
 knn(num_neighbors, tr_zero_H_trans, training_categorie, test_zero_H_trans, test_categorie)
-svmclf(tr_zero_H_trans, training_categorie, test_zero_H_trans, test_categorie)
