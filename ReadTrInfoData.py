@@ -11,7 +11,7 @@ from scipy.sparse import csc_matrix
 #order = 'continuous'	parameter:begin, rescale_num
 #order = 'backorder'	parameter:rescale_num
 #order = 'random'		parameter:begin, end, rescale_num
-def readfile_tr_infodata(order, begin, end, rescale_num, filename_info, filename_data):
+def readfile_tr_infodata(order, begin, end, rescale_num, term_interval, filename_info, filename_data):
 
 	#---data read---
 	#----begin----
@@ -144,6 +144,17 @@ def readfile_tr_infodata(order, begin, end, rescale_num, filename_info, filename
 	#generate the dictionary
 	training_term_list = np.unique(indices)
 	term_list_num = len(training_term_list)
+	tr_term_interval = np.array([0])
+	new_interval_count = 0
+	for i in range(0, len(term_interval)):
+		judge_count = new_interval_count
+		while(training_term_list[new_interval_count]<term_interval[i]):
+			new_interval_count = new_interval_count + 1
+		if(new_interval_count == judge_count):
+			continue
+		else:
+			tr_term_interval = np.append(tr_term_interval, int(new_interval_count))
+		
 	
 	#adjust the indices
 	indices_len = len(indices)
@@ -164,4 +175,4 @@ def readfile_tr_infodata(order, begin, end, rescale_num, filename_info, filename
 	#term_list_CSR_matrix = term_list_CSC_matrix.tocsr()
 	#print(type(term_list_CSR_matrix))
 	
-	return term_list_CSC_matrix, training_term_list, art_num, title, categorie
+	return term_list_CSC_matrix, training_term_list, tr_term_interval, art_num, title, categorie
